@@ -3,15 +3,17 @@ import { InputBase } from '@material-ui/core';
 import { useForm, Controller } from 'react-hook-form';
 import { useStyles } from './useStyles';
 import { useDebounce } from './debounce';
-import { fetchSearch } from '../../store/middlewares';
+import { fetchSearch, fetchFilms } from '../../store/middlewares';
 import { filmStatus } from '../../store/actions';
 import { useDispatch } from 'react-redux';
+import ClearIcon from '@material-ui/icons/Clear';
 
 export const Search = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const { control, handleSubmit } = useForm();
   const [searchValue, changeSearchValue] = useState(null);
+  const [showClose, changeShowClose] = useState(false)
 
   const search = useDebounce(searchValue, 1500);
 
@@ -32,10 +34,17 @@ export const Search = () => {
   const onSubmit = value => {
     const { search } = value;
     changeSearchValue(search);
+    changeShowClose(true);
   };
+
+  const clear = () => {
+    dispatch(fetchFilms());
+    changeShowClose(false);
+    changeSearchValue(null);
+  }
   
   return (
-    <form onChange={handleSubmit(onSubmit)} onKeyPress={handleKeyPress}>
+    <form onChange={handleSubmit(onSubmit)} onKeyPress={handleKeyPress} className={classes.wrapper}>
       <Controller
         as={InputBase}
         control={control}
@@ -51,6 +60,7 @@ export const Search = () => {
         defaultValue=""
         rules={{ required: true }}
       ></Controller>
+      {showClose && <ClearIcon className={classes.close} onClick={clear} />}
     </form>
   )
 }

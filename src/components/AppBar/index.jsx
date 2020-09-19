@@ -22,7 +22,7 @@ export const SearchAppBar = () => {
             </div>
             <Search />
           </div>
-          <AddModal styles={{ color: '#fff', borderColor: '#fff' }} />
+          <AddModal styles={{ color: '#fff', borderColor: '#fff', marginRight: 10 }} />
           <UploadFile styles={{ color: '#fff', borderColor: '#fff' }} />
         </Toolbar>
       </AppBar>

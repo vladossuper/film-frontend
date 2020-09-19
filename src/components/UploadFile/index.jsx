@@ -1,9 +1,23 @@
-import React, { useState } from 'react';
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
+import React, { useState, useEffect } from 'react';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography } from '@material-ui/core';
+import { useDispatch, useSelector } from 'react-redux';
+import { fileUpload } from '../../store/middlewares';
+import { Spinner } from '../Spinner';
 
 export const UploadFile = ({ styles }) => {
+  const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const [file, setFile] = useState(null);
+  const [loader, setLoader] = useState(false)
+  const uploadStatus = useSelector(state => state.uploadFileReducer.status);
+  const [error, handleError] = useState(false);
+
+  useEffect(() => {
+    if (uploadStatus === 200) {
+      setLoader(false);
+      handleClose();
+    }; 
+  }, [uploadStatus]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -13,16 +27,22 @@ export const UploadFile = ({ styles }) => {
     setOpen(false);
   };
 
-  const addFile = () => {
-    const data = new FormData();
+  const addFile = (e) => {
+    e.preventDefault();
     if (file) {
-      data.append(('file', file))
+      const formData = new FormData();
+      formData.append('file', file);
+      dispatch(fileUpload(formData));
+      setLoader(true);
+    } else {
+      handleError(true);
     }
   }
 
   const changeHandler = event => {
     const file = event.target.files[0];
     setFile(file);
+    handleError(false)
   };
 
   return (
@@ -37,20 +57,13 @@ export const UploadFile = ({ styles }) => {
             Upload file with all interesting films.It's very quick and easy, if you have so much data.
           </DialogContentText>
           <form method="post" encType="multipart/form-data">
-            <Button
-              variant="outlined"
-              component="label"
-            >
+            <Button variant="outlined" component="label">
               Upload File
-              <input
-                type="file"
-                accept="text/plain"
-                style={{ display: "none" }}
-                onChange={changeHandler}
-              />
+              <input name="file" type="file" accept="text/plain" style={{ display: "none" }} onChange={changeHandler} />
             </Button>
-            {file.name}
+            {file && file.name}
           </form>
+          {error && <Typography variant="subtitle1" color="error" >Upload File!</Typography>}
           
         </DialogContent>
         <DialogActions>
@@ -58,7 +71,9 @@ export const UploadFile = ({ styles }) => {
             Cancel
           </Button>
           <Button onClick={addFile} color="primary">
-            Add
+            <div style={{display: 'flex'}}>
+              {loader ? <Spinner /> : 'Add'}
+            </div> 
           </Button>
         </DialogActions>
       </Dialog>
