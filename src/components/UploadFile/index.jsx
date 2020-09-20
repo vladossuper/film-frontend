@@ -3,21 +3,24 @@ import { Button, Dialog, DialogActions, DialogContent, DialogContentText, Dialog
 import { useDispatch, useSelector } from 'react-redux';
 import { fileUpload } from '../../store/middlewares';
 import { Spinner } from '../Spinner';
+import { uploadStatus } from '../../store/actions';
 
 export const UploadFile = ({ styles }) => {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const [file, setFile] = useState(null);
   const [loader, setLoader] = useState(false)
-  const uploadStatus = useSelector(state => state.uploadFileReducer.status);
+  const statusUpload = useSelector(state => state.uploadFileReducer.status);
   const [error, handleError] = useState(false);
 
   useEffect(() => {
-    if (uploadStatus === 200) {
+    if (statusUpload === 200) {
       setLoader(false);
       handleClose();
+      setFile(null);
+      dispatch(uploadStatus({ status: null }));
     }; 
-  }, [uploadStatus]);
+  }, [dispatch, statusUpload]);
 
   const handleClickOpen = () => {
     setOpen(true);

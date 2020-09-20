@@ -1,42 +1,60 @@
 import api from '../../api';
-import { filmStatus, filmList, deleteStatus } from '../actions';
+import * as actions from '../actions';
 
 export const fetchFilms = () => async dispatch => {
   try {
-      const response = await api.post({ path: 'get-films'});
-      const { status, data } = response;
-      const { films } = data;
-      dispatch(filmStatus({ status }));
-      dispatch(filmList({ films }));
+    const response = await api.get({ path: 'film/get', params: {}});
+    const { status, data } = response;
+    const { films } = data;
+    dispatch(actions.filmStatus({ status }));
+    dispatch(actions.filmList({ films }));
   } catch (err) {
-      console.error(err);
+    const { status } = err.response;
+    dispatch(actions.filmStatus({ status }));
   }
 };
 
 export const setFilm = ({ title, release_year, format, stars }) => async dispatch => {
   try {
-      const response = await api.post({ path: 'set-film', params: { title, release_year, format, stars } });
-      const { status } = response;
-      if (status === 200) {
-          dispatch(await fetchFilms());
-      }; 
+    const response = await api.post({ path: 'film/set', params: { title, release_year, format, stars } });
+    const { status } = response;
+    if (status === 200) {
+        dispatch(fetchFilms());
+    }; 
   } catch (err) {
-      console.error(err);
+    const { status } = err.response;
+    dispatch(actions.setFilmStatus({ status }));
   }
 };
 
 export const deleteFilm = ({ _id }) => async dispatch => {
   try {
-      const response = await api.post({ path: 'delete-film', params: { _id } });
+      const response = await api.post({ path: 'film/delete', params: { _id } });
       const { status } = response;
       if (status === 200) {
-          dispatch(await fetchFilms());
+        dispatch(fetchFilms());
       };
-      dispatch(deleteStatus({ status }));
+      dispatch(actions.deleteStatus({ status }));
       setTimeout(() => {
-          dispatch(deleteStatus({ status: null }));
+        dispatch(actions.deleteStatus({ status: null }));
       }, 1000);
   } catch (err) {
-      console.error(err);
+    const { status } = err.response;
+    dispatch(actions.deleteStatus({ status }));
+
   }
 };
+
+export const filmDetails = ({ _id }) => async dispatch => {
+  try {
+    console.log(_id);
+    const response = await api.post({ path: 'film/details', params: { _id } })
+    const { status, data } = response;
+    const { film } = data;
+    dispatch(actions.detailsStatus({ status }));
+    dispatch(actions.details({ film }))
+  } catch (err) {
+    dispatch(actions.detailsError({error: true}));
+    dispatch(actions.detailsStatus({ status: 500 }));
+  }
+}

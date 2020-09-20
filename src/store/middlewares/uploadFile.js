@@ -8,7 +8,7 @@ export const fileUpload = formData => async dispatch => {
       const { status } = response;
       dispatch(uploadStatus({ status }));
       if (status === 200) {
-          dispatch(await fetchFilms());
+          dispatch(fetchFilms());
       }
   } catch (err) {
     console.error(err);

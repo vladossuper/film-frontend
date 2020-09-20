@@ -9,18 +9,17 @@ import { SearchAppBar } from '../../components/AppBar';
 
 export const Films = () => {
   const dispatch = useDispatch();
-
+  const status = useSelector(state => state.filmsReducer.status);
+  const films = useSelector(state => state.filmsReducer.films);
+  
   useEffect(() => {
     dispatch(fetchFilms());
   }, [dispatch]);
 
-  const status = useSelector(state => state.filmsReducer.status);
-  const films = useSelector(state => state.filmsReducer.films);
-
   return (
     <>
       <SearchAppBar />
-      {!status  && (
+      {!status && (
         <Grid
           container
           spacing={0}
@@ -38,12 +37,6 @@ export const Films = () => {
           <Film key={film._id} film={film} />
         )
       })}
-      {/* <Snackbar open={isOpen} autoHideDuration={6000} message='Product was deleted!' anchorOrigin={{ vertical: 'top', horizontal: 'center' }} /> */}
-        
-        {/* <Alert onClose={handleClose} severity="success">
-          Film was deleted!
-        </Alert> */}
-      
     </>
   );
 }

@@ -11,7 +11,7 @@ import ClearIcon from '@material-ui/icons/Clear';
 export const Search = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const { control, handleSubmit } = useForm();
+  const { control, handleSubmit, reset } = useForm();
   const [searchValue, changeSearchValue] = useState(null);
   const [showClose, changeShowClose] = useState(false)
 
@@ -41,7 +41,8 @@ export const Search = () => {
     dispatch(fetchFilms());
     changeShowClose(false);
     changeSearchValue(null);
-  }
+    reset({ search: null });
+  };
   
   return (
     <form onChange={handleSubmit(onSubmit)} onKeyPress={handleKeyPress} className={classes.wrapper}>

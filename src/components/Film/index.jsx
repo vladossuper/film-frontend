@@ -1,16 +1,26 @@
 import React from 'react';
 import { Grid, Card, CardContent, Typography, CardActions, Button } from '@material-ui/core';
-// import { DeleteIcon } from '@material-ui/icons/Delete';
+import DeleteIcon from '@material-ui/icons/Delete';
+import InfoIcon from '@material-ui/icons/Info';
 import { useDispatch } from 'react-redux';
 import { useStyles } from '../../components/Film/useStyles';
 import { deleteFilm } from '../../store/middlewares';
+import { Link, useHistory  } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 export const Film = ({ film }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const location = useLocation();
+  const history = useHistory();
+  const pathname = location.pathname.split('/');
+  const currentRoute = pathname[1];
 
   const deleteItem = _id => {
     dispatch(deleteFilm({ _id }));
+    if (currentRoute === 'details') {
+      history.push('/');
+    }
   };
 
   return (
@@ -31,10 +41,18 @@ export const Film = ({ film }) => {
               Stars: {film.stars}
             </Typography>
           </CardContent>
-           <CardActions>
+           <CardActions style={{ display: 'flex', justifyContent: 'space-between' }}>
             <Button onClick={() => deleteItem(film._id)}>
-              Delete
+              <DeleteIcon  color='error' />
             </Button>
+            {currentRoute !== 'details' && (
+              <Button>
+                <Link to={{ pathname: `/details/${film._id}`, state: { _id: film._id } }}>
+                  <InfoIcon color='primary' />
+                </Link>
+              </Button>
+            )}
+            
           </CardActions>
         </Card>
       </Grid>

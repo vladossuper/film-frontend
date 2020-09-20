@@ -14,6 +14,13 @@ export const filmList = list => {
   };
 };
 
+export const setFilmStatus = status => {
+  return {
+    type: types.SET_FILM_STATUS,
+    payload: status
+  };
+};
+
 export const deleteStatus = status => {
   return {
     type: types.DELETE_STATUS,
@@ -25,5 +32,26 @@ export const uploadStatus = status => {
   return {
     type: types.UPLOAD_STATUS,
     payload: status
+  };
+};
+
+export const detailsStatus = status => {
+  return {
+    type: types.DETAILS_STATUS,
+    payload: status
+  };
+};
+
+export const details = details => {
+  return {
+    type: types.DETAILS,
+    payload: details
+  };
+};
+
+export const detailsError = error => {
+  return {
+    type: types.DETAILS_ERROR,
+    payload: error
   };
 };
