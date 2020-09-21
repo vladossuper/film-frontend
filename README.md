@@ -53,3 +53,4 @@
 5. В терминале ввести *npm install*
 6. После завершения установки ввести в терминале *npm run start*
 
+Задеплоиная версия на ***Heroku*** (https://moviesappreact.herokuapp.com/)
