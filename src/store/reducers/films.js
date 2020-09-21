@@ -7,7 +7,8 @@ const initialState = {
   setFilmStatus: null,
   details: null,
   detailsStatus: null,
-  detailsError: null
+  detailsError: null,
+  filmsListError: false
 };
 
 export const filmsReducer = (state = initialState, action) => {
@@ -24,6 +25,13 @@ export const filmsReducer = (state = initialState, action) => {
       return {
         ...state,
         status
+      };
+    };
+    case types.FILM_LIST_ERROR: {
+      const { error } = action.payload;
+      return {
+        ...state,
+        filmsListError: error
       };
     };
     case types.DELETE_STATUS: {

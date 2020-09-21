@@ -7,3 +7,4 @@ export const SET_FILM_STATUS = 'SET_FILM_STATUS';
 export const DETAILS_STATUS = 'DETAILS_STATUS';
 export const DETAILS = 'DETAILS';
 export const DETAILS_ERROR = 'DETAILS_ERROR';
+export const FILM_LIST_ERROR = 'FILM_LIST_ERROR';

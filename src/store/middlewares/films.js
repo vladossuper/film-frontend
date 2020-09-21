@@ -8,9 +8,14 @@ export const fetchFilms = () => async dispatch => {
     const { films } = data;
     dispatch(actions.filmStatus({ status }));
     dispatch(actions.filmList({ films }));
+    dispatch(actions.filmListError({ error: false }));
   } catch (err) {
-    const { status } = err.response;
-    dispatch(actions.filmStatus({ status }));
+    // console.log('i am here');
+    // if (err) {
+      dispatch(actions.filmListError({ error: true }));
+    // }
+    // const { status } = err.response;
+    // dispatch(actions.filmStatus({ status }));
   }
 };
 
@@ -47,7 +52,6 @@ export const deleteFilm = ({ _id }) => async dispatch => {
 
 export const filmDetails = ({ _id }) => async dispatch => {
   try {
-    console.log(_id);
     const response = await api.post({ path: 'film/details', params: { _id } })
     const { status, data } = response;
     const { film } = data;

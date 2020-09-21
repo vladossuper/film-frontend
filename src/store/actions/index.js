@@ -55,3 +55,10 @@ export const detailsError = error => {
     payload: error
   };
 };
+
+export const filmListError = error => {
+  return {
+    type: types.FILM_LIST_ERROR,
+    payload: error
+  }
+}

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const apiURL = 'http://localhost:5000';
+const apiURL = 'https://serverfilms.herokuapp.com';
 
 const instance = axios.create({
     headers: {
